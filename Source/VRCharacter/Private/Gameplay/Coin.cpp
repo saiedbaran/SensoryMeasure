@@ -3,6 +3,9 @@
 
 #include "Gameplay/Coin.h"
 
+#include "NiagaraFunctionLibrary.h"
+#include "Components/SphereComponent.h"
+
 
 // Sets default values
 ACoin::ACoin()
@@ -15,18 +18,44 @@ ACoin::ACoin()
 	CoinMesh->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	CoinMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
 	CoinMesh->SetGenerateOverlapEvents(true);
+
+	CoinOverlapSphere = CreateDefaultSubobject<USphereComponent>(TEXT("CoinOverlapSphere"));
+	CoinOverlapSphere->SetupAttachment(CoinMesh);
+	CoinOverlapSphere->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	CoinOverlapSphere->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
+	CoinOverlapSphere->SetGenerateOverlapEvents(true);
+	CoinOverlapSphere->SetHiddenInGame(true);
+	CoinOverlapSphere->OnComponentBeginOverlap.AddDynamic(this, &ACoin::OnCoinOverlapBegin);
+
 }
 
 // Called when the game starts or when spawned
 void ACoin::BeginPlay()
 {
 	Super::BeginPlay();
+
 	
 }
 
 void ACoin::RotateAroundAxis(float DeltaTime)
 {
 	CoinMesh->AddWorldRotation(RotationDirection * RotationSpeed * DeltaTime);
+}
+
+void ACoin::OnCoinOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if(OtherComp->ComponentTags.Contains("sss"))
+	{
+		bIsRotating = false;
+		CoinMesh->SetVisibility(false);
+		if(CoinDisappearEffect)
+		{
+			UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), CoinDisappearEffect, GetActorLocation());
+		}
+
+		SetActorTickEnabled(false);
+	}
 }
 
 // Called every frame

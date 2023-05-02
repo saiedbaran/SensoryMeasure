@@ -3,10 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "NiagaraSystem.h"
 #include "GameFramework/Actor.h"
 #include "Coin.generated.h"
 
-class UNiagaraSystem;
+class USphereComponent;
 
 UCLASS()
 class VRCHARACTER_API ACoin : public AActor
@@ -24,18 +25,28 @@ protected:
 	virtual void BeginPlay() override;
 	void RotateAroundAxis(float DeltaTime);
 
+	UFUNCTION()
+	void OnCoinOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+	                   int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	UStaticMeshComponent* CoinMesh;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Coin")
-	UNiagaraSystem* CoinEffect;
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	USphereComponent* CoinOverlapSphere;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Coin")
 	float RotationSpeed = 10.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Coin")
 	FRotator RotationDirection = FRotator(0, 1, 0);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Coin|FX")
+	UNiagaraSystem* CoinDisappearEffect;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Coin|Interactions")
+	FString AcceptableOverlapTag = "tag_finger_tip";
 
 protected:
 	bool bIsRotating = true;
