@@ -51,7 +51,8 @@ void ACoin::OnCoinOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor*
 		{
 			UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), CoinDisappearEffect, GetActorLocation());
 		}
-
+		OnCoinCollected.ExecuteIfBound();
+		
 		SetActorTickEnabled(false);
 	}
 }

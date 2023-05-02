@@ -9,6 +9,8 @@
 
 class USphereComponent;
 
+DECLARE_DELEGATE(FOnCoinCollected)
+
 UCLASS()
 class VRCHARACTER_API ACoin : public AActor
 {
@@ -48,6 +50,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Coin|Interactions")
 	FName AcceptableOverlapTag = "tag_finger_tip";
 
+	FOnCoinCollected OnCoinCollected;
+	
 protected:
 	bool bIsRotating = true;
 
