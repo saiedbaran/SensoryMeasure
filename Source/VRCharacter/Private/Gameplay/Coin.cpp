@@ -33,8 +33,6 @@ ACoin::ACoin()
 void ACoin::BeginPlay()
 {
 	Super::BeginPlay();
-
-	
 }
 
 void ACoin::RotateAroundAxis(float DeltaTime)
@@ -45,7 +43,7 @@ void ACoin::RotateAroundAxis(float DeltaTime)
 void ACoin::OnCoinOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if(OtherComp->ComponentTags.Contains("sss"))
+	if(OtherComp->ComponentTags.Contains(AcceptableOverlapTag))
 	{
 		bIsRotating = false;
 		CoinMesh->SetVisibility(false);

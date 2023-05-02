@@ -46,7 +46,7 @@ public:
 	UNiagaraSystem* CoinDisappearEffect;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Coin|Interactions")
-	FString AcceptableOverlapTag = "tag_finger_tip";
+	FName AcceptableOverlapTag = "tag_finger_tip";
 
 protected:
 	bool bIsRotating = true;
