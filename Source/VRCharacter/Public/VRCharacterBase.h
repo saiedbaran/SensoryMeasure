@@ -7,8 +7,8 @@
 #include "GameFramework/Character.h"
 #include "VRCharacterBase.generated.h"
 
+class UCameraComponent;
 class AHandSkeletalActor;
-class UCineCameraComponent;
 
 UCLASS()
 class VRCHARACTER_API AVRCharacterBase : public ACharacter
@@ -49,8 +49,8 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void CharacterMoveForward(float ratio);
 
-	UFUNCTION(BlueprintCallable)
-	void FindFocusDistance();
+	/*UFUNCTION(BlueprintCallable)
+	void FindFocusDistance();*/
 
 	void SpawnHandSkeletalMeshActors();
 
@@ -59,7 +59,7 @@ public:
 	USceneComponent* VROffset;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components")
-	UCineCameraComponent* VRCamera;
+	UCameraComponent* VRCamera;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components")
 	USceneComponent* ControllerBase;

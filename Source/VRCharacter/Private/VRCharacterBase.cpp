@@ -2,8 +2,8 @@
 
 
 #include "VRCharacterBase.h"
-#include "CineCameraComponent.h"
 #include "HandSkeletalActor.h"
+#include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 
 // Sets default values
@@ -16,7 +16,7 @@ AVRCharacterBase::AVRCharacterBase()
 	VROffset->SetupAttachment(GetCapsuleComponent());
 	VROffset->SetRelativeLocation(FVector(0, 0, -1 * GetCapsuleComponent()->GetScaledCapsuleHalfHeight()));
 
-	VRCamera = CreateDefaultSubobject<UCineCameraComponent>("VRCamera");
+	VRCamera = CreateDefaultSubobject<UCameraComponent>("VRCamera");
 	VRCamera->SetupAttachment(VROffset);
 
 	ControllerBase = CreateDefaultSubobject<USceneComponent>(TEXT("ControllerBase"));
@@ -89,7 +89,7 @@ void AVRCharacterBase::CharacterMoveForward(float ratio)
 	AddActorWorldOffset(cameraProjectedForward * ratio * MaximumSpeed);
 }
 
-void AVRCharacterBase::FindFocusDistance()
+/*void AVRCharacterBase::FindFocusDistance()
 {
 	FVector start = VRCamera->GetComponentLocation();
 	FVector end = start + VRCamera->GetForwardVector() * MaximumFocusTrackingDistance;
@@ -100,14 +100,14 @@ void AVRCharacterBase::FindFocusDistance()
 
 	focusSettings.ManualFocusDistance = hitResult.Distance;
 	VRCamera->SetFocusSettings(focusSettings);
-}
+}*/
 
 // Called every frame
 void AVRCharacterBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	FindFocusDistance();
+	//FindFocusDistance();
 }
 
 // Called to bind functionality to input
