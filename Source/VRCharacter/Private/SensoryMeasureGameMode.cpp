@@ -43,5 +43,22 @@ void ASensoryMeasureGameMode::CollectCoin()
 	if (CollectedCoins >= TotalCollectableCoins)
 	{
 		FullTime = GetWorld()->TimeSeconds;
+		if(StudyData->CurrentRound == 1)
+		{
+			StudyData->CurrentRound++;
+			if(StudyData->StudyCondition == "A")
+			{
+				UGameplayStatics::OpenLevel(GetWorld(), "P_SensoryMeasure_LP");
+			}
+			if(StudyData->StudyCondition == "B")
+			{
+				UGameplayStatics::OpenLevel(GetWorld(), "P_SensoryMeasure_HP");
+			}
+		}
+		else if(StudyData->CurrentRound > 1)
+		{
+			StudyData->CurrentRound = 1;
+			UKismetSystemLibrary::QuitGame(GetWorld(), nullptr, EQuitPreference::Quit, false);
+		}
 	}
 }

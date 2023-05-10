@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameData/StudyData.h"
 #include "GameFramework/GameModeBase.h"
 #include "SensoryMeasureGameMode.generated.h"
 
@@ -35,4 +36,7 @@ public:
 	float FullTime =0.0;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "SensoryMeasure|InGameData")
 	int CollectedCoins = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SensoryMeasure|InGameData")
+	UStudyData* StudyData;
 };
