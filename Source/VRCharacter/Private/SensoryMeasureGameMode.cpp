@@ -22,6 +22,9 @@ void ASensoryMeasureGameMode::BeginPlay()
 	// Get all coin actors and count them
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ACoin::StaticClass(), AllCoinActors);
 	TotalCollectableCoins = AllCoinActors.Num();
+	UKismetSystemLibrary::PrintString(GetWorld(), FString::Printf(TEXT("TotalCollectableCoins: %d"), TotalCollectableCoins), true,
+									  true, FLinearColor::Blue, 20.f);
+
 
 	for (auto CoinActor : AllCoinActors)
 	{
@@ -40,22 +43,25 @@ void ASensoryMeasureGameMode::CollectCoin()
 {
 	CollectedCoins++;
 
+	UKismetSystemLibrary::PrintString(GetWorld(), FString::Printf(TEXT("Collected Coins: %d"), CollectedCoins), true,
+	                                  true, FLinearColor::Red, 20.f);
+
 	if (CollectedCoins >= TotalCollectableCoins)
 	{
 		FullTime = GetWorld()->TimeSeconds;
-		if(StudyData->CurrentRound == 1)
+		if (StudyData->CurrentRound == 1)
 		{
 			StudyData->CurrentRound++;
-			if(StudyData->StudyCondition == "A")
+			if (StudyData->StudyCondition == "A")
 			{
 				UGameplayStatics::OpenLevel(GetWorld(), "P_SensoryMeasure_LP");
 			}
-			if(StudyData->StudyCondition == "B")
+			if (StudyData->StudyCondition == "B")
 			{
 				UGameplayStatics::OpenLevel(GetWorld(), "P_SensoryMeasure_HP");
 			}
 		}
-		else if(StudyData->CurrentRound > 1)
+		else if (StudyData->CurrentRound > 1)
 		{
 			StudyData->CurrentRound = 1;
 			UKismetSystemLibrary::QuitGame(GetWorld(), nullptr, EQuitPreference::Quit, false);

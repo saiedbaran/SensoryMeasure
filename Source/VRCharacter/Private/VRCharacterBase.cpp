@@ -86,7 +86,7 @@ void AVRCharacterBase::CharacterMoveForward(float ratio)
 {
 	const auto cameraProjectedForward =
 		FVector(VRCamera->GetForwardVector().X, VRCamera->GetForwardVector().Y, 0).GetSafeNormal();
-	AddActorWorldOffset(cameraProjectedForward * ratio * MaximumSpeed);
+	AddActorWorldOffset(cameraProjectedForward * ratio * MaximumSpeed * GetWorld()->GetDeltaSeconds());
 }
 
 /*void AVRCharacterBase::FindFocusDistance()

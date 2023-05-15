@@ -53,5 +53,6 @@ public:
 	
 protected:
 	bool bIsRotating = true;
+	bool bIsAlreadyCollected = false;
 
 };
