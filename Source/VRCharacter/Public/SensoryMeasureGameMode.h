@@ -37,6 +37,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "SensoryMeasure|InGameData")
 	int CollectedCoins = 0;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SensoryMeasure|InGameData")
+	UPROPERTY(BlueprintReadWrite)
 	UStudyData* StudyData;
+
 };
