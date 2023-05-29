@@ -12,4 +12,21 @@ UNPCPGameInstance::UNPCPGameInstance()
 	ChannelData.Label = "Even Type";
 	ChannelData.Unit = "-";
 	LSLOutlet->Channels.Add(ChannelData);
+	LSLOutlet->ChannelFormat = EChannelFormat::cfmt_string;
+
+	ReferencedObjects.Add(LSLOutlet);
 }
+
+void UNPCPGameInstance::AddToReferencedObjects(UObject* Object)
+{
+	ReferencedObjects.Add(Object);
+}
+
+TArray<UObject*> UNPCPGameInstance::GetReferencedObjects()
+{
+	return ReferencedObjects;
+}
+
+
+
+

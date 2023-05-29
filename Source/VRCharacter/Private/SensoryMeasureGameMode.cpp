@@ -28,14 +28,23 @@ ASensoryMeasureGameMode::ASensoryMeasureGameMode()
 	LSLOutlet->Channels.Add(ChannelData);*/
 }
 
+void ASensoryMeasureGameMode::WriteLSLData()
+{
+}
+
 // Called when the game starts or when spawned
 void ASensoryMeasureGameMode::BeginPlay()
 {
 	Super::BeginPlay();
-	OnLSLEvent(FString::Printf(
-		TEXT("Group %s-%d, Begin Level, Time: %.1f"),
-		*StudyData->StudyCondition, StudyData->CurrentRound, GetWorld()->TimeSeconds));
 
+	bIsWritingLSLData = true;
+	LSLData = FString::Printf(
+		TEXT("Group %s-%d, Begin Level, Time: %.2f"),
+		*StudyData->StudyCondition, StudyData->CurrentRound, GetWorld()->TimeSeconds);
+	LSLDataWriteInterval = 3.0f;
+	/*OnLSLEvent(FString::Printf(
+		TEXT("Group %s-%d, Begin Level, Time: %.2f"),
+		*StudyData->StudyCondition, StudyData->CurrentRound, GetWorld()->TimeSeconds));*/
 
 	// Get all coin actors and count them
 	UGameplayStatics::GetAllActorsOfClass(GetWorld()
@@ -46,22 +55,8 @@ void ASensoryMeasureGameMode::BeginPlay()
 		.
 		Num();
 	UKismetSystemLibrary::PrintString(
-		GetWorld()
-		,
-		FString::Printf(TEXT("TotalCollectableCoins: %d")
-		                ,
-		                TotalCollectableCoins
-		)
-		,
-		true
-		,
-		true
-		,
-		FLinearColor::Blue
-		,
-		20.f
-	);
-
+		GetWorld(), FString::Printf(TEXT("TotalCollectableCoins: %d"), TotalCollectableCoins), true, true,
+		FLinearColor::Green, 20.f);
 
 	for
 	(
@@ -71,37 +66,24 @@ void ASensoryMeasureGameMode::BeginPlay()
 		ACoin* Coin = Cast<ACoin>(CoinActor);
 		Coin->OnCoinCollected.BindUObject(this, &ASensoryMeasureGameMode::CollectCoin);
 	}
-
-	UKismetSystemLibrary::PrintString(
-		GetWorld()
-		,
-		FString::Printf(
-			TEXT("Study Condition: %s, Current Round: %d")
-			,
-			*
-			StudyData
-			->
-			StudyCondition
-			,
-			StudyData
-			->
-			CurrentRound
-		)
-		,
-		true
-		,
-		true
-		,
-		FLinearColor::Blue
-		,
-		20.f
-	);
 }
 
 // Called every frame
 void ASensoryMeasureGameMode::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if (bIsWritingLSLData)
+	{
+		LSLDataWriteTime += DeltaTime;
+		OnLSLEvent(LSLData);
+
+		if (LSLDataWriteTime > LSLDataWriteInterval)
+		{
+			bIsWritingLSLData = false;
+			LSLDataWriteTime = 0.f;
+		}
+	}
 }
 
 void ASensoryMeasureGameMode::CollectCoin()
@@ -109,6 +91,8 @@ void ASensoryMeasureGameMode::CollectCoin()
 	OnLSLEvent(FString::Printf(
 		TEXT("Group %s-%d, Coin Collected: %d, Time: %.1f"),
 		*StudyData->StudyCondition, StudyData->CurrentRound, CollectedCoins, GetWorld()->TimeSeconds));
+	LSLDataWriteTime = 0.0f;
+	LSLDataWriteInterval = 1.0f;
 
 
 	CollectedCoins++;
@@ -137,6 +121,11 @@ void ASensoryMeasureGameMode::CollectCoin()
 			OnLSLEvent(FString::Printf(
 				TEXT("Group %s-%d, Game Over, Time: %.1f"),
 				*StudyData->StudyCondition, StudyData->CurrentRound, GetWorld()->TimeSeconds));
+			OnLSLEvent(FString::Printf(
+				TEXT("Group %s-%d, Coin Collected: %d, Time: %.1f"),
+				*StudyData->StudyCondition, StudyData->CurrentRound, CollectedCoins, GetWorld()->TimeSeconds));
+			LSLDataWriteTime = 0.0f;
+			LSLDataWriteInterval = 1.0f;
 
 			StudyData->CurrentRound = 12;
 			UKismetSystemLibrary::QuitGame(GetWorld(), nullptr, EQuitPreference::Quit, false);

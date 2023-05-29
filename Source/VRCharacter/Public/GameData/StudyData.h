@@ -15,6 +15,8 @@ class VRCHARACTER_API UStudyData : public UPrimaryDataAsset
 	GENERATED_BODY()
 
 public:
+	UStudyData();
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Study Data")
 	FString StudyCondition = "A";
 	
@@ -23,4 +25,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Game Settings")
 	int CurrentRound = 1;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	ULSLOutletComponent* LSLOutletGameData;
 };

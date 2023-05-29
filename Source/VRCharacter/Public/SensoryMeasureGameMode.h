@@ -24,7 +24,10 @@ public:
 	void CollectCoin();
 
 	UFUNCTION(BlueprintImplementableEvent)
-	void OnLSLEvent(const FString &EventData);
+	void OnLSLEvent(const FString& EventData);
+
+	UFUNCTION(BlueprintCallable)
+	void WriteLSLData();
 
 protected:
 	// Called when the game starts or when spawned
@@ -34,17 +37,29 @@ public:
 	/*UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	ULSLOutletComponent* LSLOutlet;*/
 
+	UPROPERTY()
+	UNPCPGameInstance* NPCPGameInstance;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "SensoryMeasure|Setting")
 	int TotalCollectableCoins = 0;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "SensoryMeasure|Setting")
 	TArray<AActor*> AllCoinActors;
-	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "SensoryMeasure|InGameData")
-	float FullTime =0.0;
+	float FullTime = 0.0;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "SensoryMeasure|InGameData")
 	int CollectedCoins = 0;
 
 	UPROPERTY(BlueprintReadWrite)
 	UStudyData* StudyData;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SensoryMeasure|LSL")
+	bool bIsWritingLSLData = false;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SensoryMeasure|LSL")
+	FString LSLData;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SensoryMeasure|LSL")
+	float LSLDataWriteTime = 0.0f;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SensoryMeasure|LSL")
+	float LSLDataWriteInterval = 2.f;
+	
 };

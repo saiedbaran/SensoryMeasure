@@ -21,6 +21,12 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	ULSLOutletComponent* LSLOutlet;
 	
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void OnLSLEvent(const FString &EventData);
+
+	UFUNCTION(BlueprintCallable)
+	void AddToReferencedObjects(UObject* Object);
+
+	UFUNCTION(BlueprintCallable)
+	TArray<UObject*> GetReferencedObjects();
 };
