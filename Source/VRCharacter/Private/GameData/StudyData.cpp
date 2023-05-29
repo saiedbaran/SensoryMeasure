@@ -7,5 +7,5 @@
 
 UStudyData::UStudyData()
 {
-
+	
 }

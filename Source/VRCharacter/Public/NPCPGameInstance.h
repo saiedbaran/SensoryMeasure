@@ -22,12 +22,8 @@ class VRCHARACTER_API UNPCPGameInstance : public UGameInstance
 
 public:
 	UNPCPGameInstance();
-	
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	ULSLOutletComponent* LSLOutlet;
-	
-	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-	void OnLSLEvent(const FString &EventData);
+
+	virtual void Init() override;
 
 	UFUNCTION(BlueprintCallable)
 	void AddToReferencedObjects(UObject* Object);

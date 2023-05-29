@@ -18,18 +18,6 @@ ASensoryMeasureGameMode::ASensoryMeasureGameMode()
 	static ConstructorHelpers::FObjectFinder<UStudyData> StudyDataBPClass(
 		TEXT("/Game/SensoryMeasure/08_GameData/DA_StudyData"));
 	StudyData = StudyDataBPClass.Object;
-
-	/*LSLOutlet = CreateDefaultSubobject<ULSLOutletComponent>(TEXT("LSLOutlet"));
-	LSLOutlet->StreamName = "NPCP[PC]";
-	LSLOutlet->StreamType = "Event Type";
-	FChannelData ChannelData;
-	ChannelData.Label = "Even Type";
-	ChannelData.Unit = "-";
-	LSLOutlet->Channels.Add(ChannelData);*/
-}
-
-void ASensoryMeasureGameMode::WriteLSLData()
-{
 }
 
 // Called when the game starts or when spawned
@@ -37,14 +25,14 @@ void ASensoryMeasureGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 
-	bIsWritingLSLData = true;
-	LSLData = FString::Printf(
+	NPCPGameInstance = Cast<UNPCPGameInstance>(GetGameInstance());
+	if (NPCPGameInstance)
+	{
+		const TArray<FString> DataString = {FString::Printf(
 		TEXT("Group %s-%d, Begin Level, Time: %.2f"),
-		*StudyData->StudyCondition, StudyData->CurrentRound, GetWorld()->TimeSeconds);
-	LSLDataWriteInterval = 3.0f;
-	/*OnLSLEvent(FString::Printf(
-		TEXT("Group %s-%d, Begin Level, Time: %.2f"),
-		*StudyData->StudyCondition, StudyData->CurrentRound, GetWorld()->TimeSeconds));*/
+		*StudyData->LevelName, StudyData->CurrentRound, GetWorld()->TimeSeconds)};
+		NPCPGameInstance->PushSampleString(DataString);
+	}
 
 	// Get all coin actors and count them
 	UGameplayStatics::GetAllActorsOfClass(GetWorld()
@@ -72,30 +60,20 @@ void ASensoryMeasureGameMode::BeginPlay()
 void ASensoryMeasureGameMode::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	if (bIsWritingLSLData)
-	{
-		LSLDataWriteTime += DeltaTime;
-		OnLSLEvent(LSLData);
-
-		if (LSLDataWriteTime > LSLDataWriteInterval)
-		{
-			bIsWritingLSLData = false;
-			LSLDataWriteTime = 0.f;
-		}
-	}
 }
 
 void ASensoryMeasureGameMode::CollectCoin()
 {
-	OnLSLEvent(FString::Printf(
-		TEXT("Group %s-%d, Coin Collected: %d, Time: %.1f"),
-		*StudyData->StudyCondition, StudyData->CurrentRound, CollectedCoins, GetWorld()->TimeSeconds));
-	LSLDataWriteTime = 0.0f;
-	LSLDataWriteInterval = 1.0f;
-
-
 	CollectedCoins++;
+	
+	if (NPCPGameInstance)
+	{
+		const TArray<FString> DataString = {FString::Printf(
+		TEXT("Group %s-%d, Coin Collected: %d, Time: %.1f"),
+		*StudyData->LevelName, StudyData->CurrentRound, CollectedCoins, GetWorld()->TimeSeconds)};
+		NPCPGameInstance->PushSampleString(DataString);
+	}
+	
 	UKismetSystemLibrary::PrintString(GetWorld(), FString::Printf(TEXT("Collected Coins: %d"), CollectedCoins), true,
 	                                  true, FLinearColor::Red, 20.f);
 
@@ -109,23 +87,24 @@ void ASensoryMeasureGameMode::CollectCoin()
 			{
 				UGameplayStatics::OpenLevel(GetWorld(), "P_SensoryMeasure_LP");
 				StudyData->StudyCondition = "End";
+				StudyData->LevelName = "LP";
 			}
 			if (StudyData->StudyCondition == "B")
 			{
 				UGameplayStatics::OpenLevel(GetWorld(), "P_SensoryMeasure_HP");
 				StudyData->StudyCondition = "End";
+				StudyData->LevelName = "HP";
 			}
 		}
 		else if (StudyData->CurrentRound > 1)
 		{
-			OnLSLEvent(FString::Printf(
+			if (NPCPGameInstance)
+			{
+				const TArray<FString> DataString = {FString::Printf(
 				TEXT("Group %s-%d, Game Over, Time: %.1f"),
-				*StudyData->StudyCondition, StudyData->CurrentRound, GetWorld()->TimeSeconds));
-			OnLSLEvent(FString::Printf(
-				TEXT("Group %s-%d, Coin Collected: %d, Time: %.1f"),
-				*StudyData->StudyCondition, StudyData->CurrentRound, CollectedCoins, GetWorld()->TimeSeconds));
-			LSLDataWriteTime = 0.0f;
-			LSLDataWriteInterval = 1.0f;
+				*StudyData->StudyCondition, StudyData->CurrentRound, GetWorld()->TimeSeconds)};
+				NPCPGameInstance->PushSampleString(DataString);
+			}
 
 			StudyData->CurrentRound = 12;
 			UKismetSystemLibrary::QuitGame(GetWorld(), nullptr, EQuitPreference::Quit, false);

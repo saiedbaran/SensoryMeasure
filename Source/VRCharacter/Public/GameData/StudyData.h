@@ -26,6 +26,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Game Settings")
 	int CurrentRound = 1;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	ULSLOutletComponent* LSLOutletGameData;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Game Settings")
+	FString LevelName;
 };
