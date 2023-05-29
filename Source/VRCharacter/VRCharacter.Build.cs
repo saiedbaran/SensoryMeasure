@@ -9,7 +9,7 @@ public class VRCharacter : ModuleRules
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
 		PublicDependencyModuleNames.AddRange(new string[] 
-			{ "Core", "CoreUObject", "Engine", "InputCore", "CinematicCamera", "HeadMountedDisplay", "Niagara", "UMG", "Slate"});
+			{ "Core", "CoreUObject", "Engine", "InputCore", "CinematicCamera", "HeadMountedDisplay", "Niagara", "UMG", "Slate", "LSL"});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 

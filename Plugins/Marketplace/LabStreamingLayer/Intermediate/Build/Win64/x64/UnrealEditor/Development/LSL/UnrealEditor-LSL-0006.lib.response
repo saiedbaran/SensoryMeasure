@@ -1,0 +1,12 @@
+/NOLOGO
+/errorReport:prompt
+/MACHINE:x64
+/SUBSYSTEM:WINDOWS
+/DEF
+/NAME:"UnrealEditor-LSL-0006.dll"
+/IGNORE:4221
+/NODEFAULTLIB
+"C:\Users\Saeed\Documents\Unreal Projects\SensoryMeasure\Intermediate\Build\Win64\x64\VRCharacterEditor\Development\Engine\SharedPCH.Engine.ShadowErrors.InclOrderUnreal5_1.h.obj"
+"C:\Users\Saeed\Documents\Unreal Projects\SensoryMeasure\Plugins\Marketplace\LabStreamingLayer\Intermediate\Build\Win64\x64\UnrealEditor\Development\LSL\Module.LSL.cpp.obj"
+"C:\Users\Saeed\Documents\Unreal Projects\SensoryMeasure\Plugins\Marketplace\LabStreamingLayer\Intermediate\Build\Win64\x64\UnrealEditor\Development\LSL\Default.rc2.res"
+/OUT:"C:\Users\Saeed\Documents\Unreal Projects\SensoryMeasure\Plugins\Marketplace\LabStreamingLayer\Intermediate\Build\Win64\x64\UnrealEditor\Development\LSL\UnrealEditor-LSL-0006.lib"

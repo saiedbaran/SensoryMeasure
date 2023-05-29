@@ -1,0 +1,14 @@
+{
+	"RemapUnityFiles": 
+	{
+		"Module.LSL.cpp.obj": [
+			"LSL.init.gen.cpp.obj",
+			"LSLInletComponent.gen.cpp.obj",
+			"LSLOutletComponent.gen.cpp.obj",
+			"LSLTypes.gen.cpp.obj",
+			"FLSL.cpp.obj",
+			"LSLInletComponent.cpp.obj",
+			"LSLOutletComponent.cpp.obj"
+		]
+	}
+}

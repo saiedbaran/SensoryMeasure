@@ -7,6 +7,8 @@
 #include "GameFramework/GameModeBase.h"
 #include "SensoryMeasureGameMode.generated.h"
 
+class ULSLOutletComponent;
+
 UCLASS()
 class VRCHARACTER_API ASensoryMeasureGameMode : public AGameModeBase
 {
@@ -21,11 +23,16 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void CollectCoin();
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnLSLEvent(const FString &EventData);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 public:
+	/*UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	ULSLOutletComponent* LSLOutlet;*/
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "SensoryMeasure|Setting")
 	int TotalCollectableCoins = 0;

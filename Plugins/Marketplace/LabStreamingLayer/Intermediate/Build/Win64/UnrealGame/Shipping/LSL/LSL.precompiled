@@ -1,0 +1,6 @@
+{
+	"OutputFiles": [
+		"Module.LSL.cpp.obj",
+		"Module.LSL.gen.cpp.obj"
+	]
+}
